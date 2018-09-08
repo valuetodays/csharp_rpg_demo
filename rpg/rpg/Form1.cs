@@ -11,6 +11,7 @@ namespace rpg
     public partial class Form1 : Form
     {
         int x = 50, y = 50;
+        int face = 1;
         public Form1()
         {
             InitializeComponent();
@@ -23,13 +24,15 @@ namespace rpg
 
         private void Draw()
         {
-            Bitmap bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("role.png"));
+            Bitmap bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("r1.png"));
             bitmap.SetResolution(96, 96);
             Graphics g1 = pictureBox1.CreateGraphics();
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
-            g.DrawImage(bitmap, x, y);
+            Rectangle crazycoderRgl = new Rectangle(0, bitmap.Height/4*(face-1), bitmap.Width/4, bitmap.Height/4);
+            Bitmap bitmap0 = bitmap.Clone(crazycoderRgl, bitmap.PixelFormat);
+            g.DrawImage(bitmap0, x, y);
             myBuffer.Render();
             myBuffer.Dispose();
         }
@@ -42,15 +45,19 @@ namespace rpg
             if (e.KeyCode == Keys.Up)
             {
                 y -= 5;
+                face = 4;
             } else if (e.KeyCode ==  Keys.Down)
             {
                 y += 5;
+                face = 1;
             } else if (e.KeyCode == Keys.Left)
             {
                 x -= 5;
+                face = 2;
             } else if (e.KeyCode == Keys.Right)
             {
                 x += 5;
+                face = 3;
             }
             Draw();
         }
