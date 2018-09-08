@@ -23,11 +23,15 @@ namespace rpg
 
         private void Draw()
         {
-            ;
             Bitmap bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("role.png"));
             bitmap.SetResolution(96, 96);
-            Graphics g = pictureBox1.CreateGraphics();
+            Graphics g1 = pictureBox1.CreateGraphics();
+            BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+            BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
+            Graphics g = myBuffer.Graphics;
             g.DrawImage(bitmap, x, y);
+            myBuffer.Render();
+            myBuffer.Dispose();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
