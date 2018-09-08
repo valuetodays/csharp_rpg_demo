@@ -12,6 +12,7 @@ namespace rpg
     {
         int x = 50, y = 50;
         int face = 1;
+        int animation_ctrl = 0;
         public Form1()
         {
             InitializeComponent();
@@ -30,7 +31,8 @@ namespace rpg
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
-            Rectangle crazycoderRgl = new Rectangle(0, bitmap.Height/4*(face-1), bitmap.Width/4, bitmap.Height/4);
+            animation_ctrl += 1;
+            Rectangle crazycoderRgl = new Rectangle(bitmap.Width/4*(animation_ctrl%4), bitmap.Height/4*(face-1), bitmap.Width/4, bitmap.Height/4);
             Bitmap bitmap0 = bitmap.Clone(crazycoderRgl, bitmap.PixelFormat);
             g.DrawImage(bitmap0, x, y);
             myBuffer.Render();
