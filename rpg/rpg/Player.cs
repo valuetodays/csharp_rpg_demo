@@ -18,6 +18,8 @@ namespace rpg
         public Bitmap bitmap;
         public static int current_player = 0;
         public int is_active = 0;
+        public int x_offset = -120;
+        public int y_offset = -220;
 
         public Player()
         {
@@ -89,7 +91,7 @@ namespace rpg
                 p.bitmap.Width / 4,
                 p.bitmap.Height / 4);
             Bitmap bitmap0 = p.bitmap.Clone(crazycoderRgl, p.bitmap.PixelFormat);
-            g.DrawImage(bitmap0, map_sx + p.x, map_sy + p.y);
+            g.DrawImage(bitmap0, map_sx + p.x + p.x_offset, map_sy + p.y + p.y_offset);
         }
 
 
