@@ -80,16 +80,16 @@ namespace rpg
             player[current_player].face = face;
         }
 
-        public static void draw(Player[] player, Graphics g) 
+        public static void draw(Player[] player, Graphics g, int map_sx, int map_sy)
         {
             Player p = player[current_player];
 
-            Rectangle crazycoderRgl = new Rectangle(p.bitmap.Width / 4 * (p.anm_frame % 4), 
-                p.bitmap.Height / 4 * (p.face - 1), 
-                p.bitmap.Width / 4, 
+            Rectangle crazycoderRgl = new Rectangle(p.bitmap.Width / 4 * (p.anm_frame % 4),
+                p.bitmap.Height / 4 * (p.face - 1),
+                p.bitmap.Width / 4,
                 p.bitmap.Height / 4);
             Bitmap bitmap0 = p.bitmap.Clone(crazycoderRgl, p.bitmap.PixelFormat);
-            g.DrawImage(bitmap0, p.x, p.y);
+            g.DrawImage(bitmap0, map_sx + p.x, map_sy + p.y);
         }
 
 
@@ -126,6 +126,21 @@ namespace rpg
             Player p = player[current_player];
             p.anm_frame = 0;
             p.last_walk_time = 0;
+        }
+
+        public static int get_pos_x(Player[] player)
+        {
+            return player[current_player].x;
+        }
+
+        public static int get_pos_y(Player[] player)
+        {
+            return player[current_player].y;
+        }
+
+        public static int get_pos_face(Player[] player)
+        {
+            return player[current_player].face;
         }
     }
 }

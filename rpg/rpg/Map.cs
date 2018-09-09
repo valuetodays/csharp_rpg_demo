@@ -30,5 +30,27 @@ namespace rpg
 
             Player.set_pos(player, x, y, face);
         }
+
+        public static void draw(Map[] map, Player[] player, Graphics g, Rectangle stage)
+        {
+            Map m = map[current_map];
+            int map_w = m.bitmap.Width;
+            int map_sx = 0;
+            int p_x = Player.get_pos_x(player);
+
+            if (p_x <= stage.Width/2)
+            {
+                map_sx = 0;
+            } else if (p_x >= map_w - stage.Width/2)
+            {
+                map_sx = stage.Width - map_w;
+            } else
+            {
+                map_sx = stage.Width / 2 - p_x;
+            }
+
+            g.DrawImage(m.bitmap, map_sx, 0);
+            Player.draw(player, g, map_sx, 0);
+        }
     }
 }

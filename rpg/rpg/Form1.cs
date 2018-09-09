@@ -55,8 +55,8 @@ namespace rpg
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
-            Map.draw(map, g);
-            Player.draw(player, g);
+            Map.draw(map, player, g, new Rectangle(0, 0, stage.Width, stage.Height));
+            
             myBuffer.Render();
             myBuffer.Dispose();
         }
