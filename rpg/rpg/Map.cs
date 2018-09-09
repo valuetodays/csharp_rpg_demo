@@ -10,6 +10,8 @@ namespace rpg
         public static int current_map = 0;
         public string bitmap_path;
         public Bitmap bitmap;
+        public string shade_path;
+        public Bitmap shade;
 
         public static void draw(Map[] map, Graphics g)
         {
@@ -23,8 +25,14 @@ namespace rpg
             {
                 map[current_map].bitmap = null;
             }
+            if (map[current_map].shade != null)
+            {
+                map[current_map].shade = null;
+            }
             map[newIndex].bitmap = new Bitmap(map[newIndex].bitmap_path);
             map[newIndex].bitmap.SetResolution(96, 96);
+            map[newIndex].shade = new Bitmap(map[newIndex].shade_path);
+            map[newIndex].shade.SetResolution(96, 96);
 
             current_map = newIndex;
 
@@ -65,6 +73,7 @@ namespace rpg
 
             g.DrawImage(m.bitmap, map_sx, map_sy);
             Player.draw(player, g, map_sx, map_sy);
+            g.DrawImage(m.shade, map_sx, map_sy);
         }
     }
 }
