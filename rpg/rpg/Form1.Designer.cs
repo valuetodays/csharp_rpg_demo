@@ -36,7 +36,7 @@
             // 
             this.stage.Location = new System.Drawing.Point(-4, -1);
             this.stage.Name = "stage";
-            this.stage.Size = new System.Drawing.Size(675, 517);
+            this.stage.Size = new System.Drawing.Size(680, 528);
             this.stage.TabIndex = 0;
             this.stage.TabStop = false;
             this.stage.Click += new System.EventHandler(this.pictureBox1_Click);
@@ -45,7 +45,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(668, 513);
+            this.ClientSize = new System.Drawing.Size(675, 523);
             this.Controls.Add(this.stage);
             this.KeyPreview = true;
             this.Name = "Form1";

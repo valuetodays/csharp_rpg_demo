@@ -12,6 +12,7 @@ namespace rpg
     {
         Player[] player = new Player[3];
         Map[] map = new Map[2];
+        WMPLib.WindowsMediaPlayer music_player = new WMPLib.WindowsMediaPlayer();
         public Form1()
         {
             InitializeComponent();
@@ -39,14 +40,16 @@ namespace rpg
             map[0].shade_path = ResourceContextDeterminer.GetAssetPath("map1_shade.png");
             map[0].block_path = ResourceContextDeterminer.GetAssetPath("map1_block.png");
             map[0].back_path = ResourceContextDeterminer.GetAssetPath("map1_back.png");
+            map[0].music = ResourceContextDeterminer.GetAssetPath("1.mp3");
 
             map[1] = new Map();
             map[1].bitmap_path = ResourceContextDeterminer.GetAssetPath("map2.png");
             map[1].shade_path = ResourceContextDeterminer.GetAssetPath("map2_shade.png");
             map[1].block_path = ResourceContextDeterminer.GetAssetPath("map2_block.png");
+            map[1].music = ResourceContextDeterminer.GetAssetPath("2.mp3");
 
-
-            Map.change_map(map, player, 0, 30, 500, 1);
+            
+            Map.change_map(map, player, 0, 30, 500, 1, music_player);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

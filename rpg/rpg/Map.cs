@@ -16,6 +16,7 @@ namespace rpg
         public Bitmap block;
         public string back_path;
         public Bitmap back;
+        public string music;
 
         public static void draw(Map[] map, Graphics g)
         {
@@ -23,7 +24,9 @@ namespace rpg
             g.DrawImage(m.bitmap, 0, 0);
         }
 
-        public static void change_map(Map[] map, Player[] player, int newIndex, int x, int y, int face)
+        public static void change_map(Map[] map, Player[] player, 
+            int newIndex, int x, int y, int face, 
+            WMPLib.WindowsMediaPlayer music_player)
         {
             if (map[current_map].bitmap != null)
             {
@@ -66,6 +69,8 @@ namespace rpg
             current_map = newIndex;
 
             Player.set_pos(player, x, y, face);
+
+            music_player.URL = map[current_map].music;
         }
 
         public static void draw(Map[] map, Player[] player, Graphics g, Rectangle stage)
