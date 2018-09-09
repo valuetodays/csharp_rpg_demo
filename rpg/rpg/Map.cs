@@ -24,7 +24,7 @@ namespace rpg
             g.DrawImage(m.bitmap, 0, 0);
         }
 
-        public static void change_map(Map[] map, Player[] player, 
+        public static void change_map(Map[] map, Player[] player, Npc[] npc, 
             int newIndex, int x, int y, int face, 
             WMPLib.WindowsMediaPlayer music_player)
         {
@@ -66,6 +66,22 @@ namespace rpg
                 map[newIndex].back.SetResolution(96, 96);
             }
 
+            for (int i = 0; i < npc.Length; i++)
+            {
+                if (npc[i] != null)
+                {
+                    if (npc[i].map == current_map)
+                    {
+                        npc[i].unload();
+                    }
+                    if (npc[i].map == newIndex)
+                    {
+                        npc[i].load();
+                    }
+                }
+            }
+
+
             current_map = newIndex;
 
             Player.set_pos(player, x, y, face);
@@ -73,7 +89,7 @@ namespace rpg
             music_player.URL = map[current_map].music;
         }
 
-        public static void draw(Map[] map, Player[] player, Graphics g, Rectangle stage)
+        public static void draw(Map[] map, Player[] player, Npc[] npc, Graphics g, Rectangle stage)
         {
             Map m = map[current_map];
             int map_w = m.bitmap.Width;
@@ -111,6 +127,16 @@ namespace rpg
             }
             g.DrawImage(m.bitmap, map_sx, map_sy);
             Player.draw(player, g, map_sx, map_sy);
+            for (int i = 0; i < npc.Length; i++)
+            {
+                if (npc[i] != null)
+                {
+                    if (npc[i].map == current_map)
+                    {
+                        npc[i].draw(g, map_sx, map_sy);
+                    }
+                }
+            }
             g.DrawImage(m.shade, map_sx, map_sy);
         }
 

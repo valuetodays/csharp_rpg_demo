@@ -12,6 +12,7 @@ namespace rpg
     {
         Player[] player = new Player[3];
         Map[] map = new Map[2];
+        Npc[] npc = new Npc[2];
         WMPLib.WindowsMediaPlayer music_player = new WMPLib.WindowsMediaPlayer();
         public Form1()
         {
@@ -48,8 +49,14 @@ namespace rpg
             map[1].block_path = ResourceContextDeterminer.GetAssetPath("map2_block.png");
             map[1].music = ResourceContextDeterminer.GetAssetPath("2.mp3");
 
-            
-            Map.change_map(map, player, 0, 30, 500, 1, music_player);
+            npc[0] = new rpg.Npc();
+            npc[0].map = 0;
+            npc[0].x = 700;
+            npc[0].y = 300;
+            npc[0].bitmap_path = ResourceContextDeterminer.GetAssetPath("npc1.png");
+
+
+            Map.change_map(map, player, npc, 0, 30, 500, 1, music_player);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -63,7 +70,7 @@ namespace rpg
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
-            Map.draw(map, player, g, new Rectangle(0, 0, stage.Width, stage.Height));
+            Map.draw(map, player, npc, g, new Rectangle(0, 0, stage.Width, stage.Height));
             
             myBuffer.Render();
             myBuffer.Dispose();
