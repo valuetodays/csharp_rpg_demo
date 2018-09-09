@@ -85,8 +85,8 @@ namespace rpg
             current_map = newIndex;
 
             Player.set_pos(player, x, y, face);
-
-            music_player.URL = map[current_map].music;
+            // 不播放音乐了
+           //  music_player.URL = map[current_map].music;
         }
 
         public static void draw(Map[] map, Player[] player, Npc[] npc, Graphics g, Rectangle stage)
@@ -96,48 +96,111 @@ namespace rpg
             int map_h = m.bitmap.Height;
             int p_x = Player.get_pos_x(player);
             int p_y = Player.get_pos_y(player);
-            int map_sx = 0;
-            int map_sy = 0;
-
-            if (p_x <= stage.Width/2)
-            {
-                map_sx = 0;
-            } else if (p_x >= map_w - stage.Width/2)
-            {
-                map_sx = stage.Width - map_w;
-            } else
-            {
-                map_sx = stage.Width / 2 - p_x;
-            }
-
-            if (p_y <= stage.Height / 2)
-            {
-                map_sy = 0;
-            } else if (p_y >= map_h - stage.Height/2)
-            {
-                map_sy = stage.Height - map_h;
-            } else
-            {
-                map_sy = stage.Height / 2 - p_y;
-            }
+            int map_sx = get_map_sx(map, player, stage);
+            int map_sy = get_map_sy(map, player, stage);
 
             if (m.back != null)
             {
                 g.DrawImage(m.back, 0, 0);
             }
             g.DrawImage(m.bitmap, map_sx, map_sy);
-            Player.draw(player, g, map_sx, map_sy);
+            draw_player_npc(map, player, npc, g, map_sx, map_sy);
+            g.DrawImage(m.shade, map_sx, map_sy);
+        }
+
+        private static void draw_player_npc(Map[] map, Player[] player, Npc[] npc, Graphics g, int map_sx, int map_sy)
+        {
+            Layer_sort[] layer_sort = new Layer_sort[npc.Length + 1];
+
             for (int i = 0; i < npc.Length; i++)
             {
+                layer_sort[i] = new Layer_sort();
                 if (npc[i] != null)
                 {
-                    if (npc[i].map == current_map)
+                    layer_sort[i].y = npc[i].y;
+                } else
+                {
+                    layer_sort[i].y = int.MaxValue;
+                }
+                layer_sort[i].index = i;
+                layer_sort[i].type = 1;
+            }
+            layer_sort[npc.Length] = new Layer_sort();
+            layer_sort[npc.Length].y = Player.get_pos_y(player);
+            layer_sort[npc.Length].index = 0;
+            layer_sort[npc.Length].type = 0;
+
+            System.Array.Sort(layer_sort, new Layer_sort_comparer());
+
+            for (int i = 0; i < layer_sort.Length; i++)
+            {
+                if (layer_sort[i].type == 0)
+                {
+                    Player.draw(player, g, map_sx, map_sy);
+                }
+                else if (layer_sort[i].type == 1)
+                {
+                    int index = layer_sort[i].index;
+                    if (npc[index] != null && npc[index].map == current_map)
                     {
-                        npc[i].draw(g, map_sx, map_sy);
+                        npc[index].draw(g, map_sx, map_sy);
                     }
                 }
             }
-            g.DrawImage(m.shade, map_sx, map_sy);
+        }
+
+        private static int get_map_sy(Map[] map, Player[] player, Rectangle stage)
+        {
+            Map m = map[current_map];
+            if (m.bitmap == null)
+            {
+                return 0;
+            }
+            int map_h = m.bitmap.Height;
+            int p_y = Player.get_pos_y(player);
+
+
+            int map_sy = 0;
+            if (p_y <= stage.Height / 2)
+            {
+                map_sy = 0;
+            }
+            else if (p_y >= map_h - stage.Height / 2)
+            {
+                map_sy = stage.Height - map_h;
+            }
+            else
+            {
+                map_sy = stage.Height / 2 - p_y;
+            }
+            return map_sy;
+        }
+
+        private static int get_map_sx(Map[] map, Player[] player, Rectangle stage)
+        {
+            Map m = map[current_map];
+            if (m.bitmap == null)
+            {
+                return 0;
+            }
+            int map_w = m.bitmap.Width;
+            int p_x = Player.get_pos_x(player);
+            int map_sx = 0;
+
+            if (p_x <= stage.Width / 2)
+            {
+                map_sx = 0;
+            }
+            else if (p_x >= map_w - stage.Width / 2)
+            {
+                map_sx = stage.Width - map_w;
+            }
+            else
+            {
+                map_sx = stage.Width / 2 - p_x;
+            }
+
+            return map_sx;
         }
 
         public static bool can_through(Map[] map, int x, int y)
