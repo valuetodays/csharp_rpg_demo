@@ -4,8 +4,13 @@ using System.Text;
 
 namespace rpg
 {
-    class Common
+    class Comm
     {
+        public static long Time()
+        {
+            return currentTimeMillis();
+        }
+
         public static long currentTimeMillis()
         {
             TimeSpan ts = DateTime.Now - new DateTime(1979, 1, 1);

@@ -11,7 +11,6 @@ namespace rpg
     public partial class Form1 : Form
     {
         Player[] player = new Player[3];
-        int animation_ctrl = 0;
         public Form1()
         {
             InitializeComponent();
@@ -43,12 +42,11 @@ namespace rpg
 
         private void Draw()
         {
-            Graphics g1 = pictureBox1.CreateGraphics();
+            Graphics g1 = stage.CreateGraphics();
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
-            animation_ctrl += 1;
-            Player.draw(player, g, animation_ctrl);
+            Player.draw(player, g);
             myBuffer.Render();
             myBuffer.Dispose();
         }
@@ -57,8 +55,14 @@ namespace rpg
         {
             Console.WriteLine("form1.keydown");
 
-            pictureBox1.Refresh();
+            stage.Refresh();
             Player.key_ctrl(player, e);
+            Draw();
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            Player.key_ctrl_up(player, e);
             Draw();
         }
     }

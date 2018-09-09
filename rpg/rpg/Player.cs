@@ -11,6 +11,10 @@ namespace rpg
         public int x = 50;
         public int y = 50;
         public int face = 1;
+        public int anm_frame = 0;
+        public long last_walk_time = 0;
+        public long walk_interval = 100;
+        public int speed = 20;
         public Bitmap bitmap;
         public static int current_player = 0;
         public int is_active = 0;
@@ -30,33 +34,50 @@ namespace rpg
                 key_change_player(player);
             }
 
-            if (e.KeyCode == Keys.Up)
+            if (e.KeyCode == Keys.Up && p.face != 4)
             {
-                p.y -= 5;
                 p.face = 4;
             }
-            else if (e.KeyCode == Keys.Down)
+            else if (e.KeyCode == Keys.Down && p.face != 1)
             {
-                p.y += 5;
                 p.face = 1;
             }
-            else if (e.KeyCode == Keys.Left)
+            else if (e.KeyCode == Keys.Left && p.face != 2)
             {
-                p.x -= 5;
                 p.face = 2;
             }
-            else if (e.KeyCode == Keys.Right)
+            else if (e.KeyCode == Keys.Right && p.face != 3)
             {
-                p.x += 5;
                 p.face = 3;
             }
+            // 间隔判定
+            if (e.KeyCode == Keys.Up)
+            {
+                p.y = p.y - p.speed;
+            } else if (e.KeyCode == Keys.Down)
+            {
+                p.y = p.y + p.speed;
+            } else if (e.KeyCode == Keys.Left)
+            {
+                p.x = p.x - p.speed;
+            } else if (e.KeyCode == Keys.Right)
+            {
+                p.x = p.x + p.speed;
+            }
+
+            p.anm_frame++;
+            if (p.anm_frame >= int.MaxValue)
+            {
+                p.anm_frame = 0;
+            }
+            p.last_walk_time = Comm.Time();
         }
 
-        public static void draw(Player[] player, Graphics g, int animation_ctrl) 
+        public static void draw(Player[] player, Graphics g) 
         {
             Player p = player[current_player];
 
-            Rectangle crazycoderRgl = new Rectangle(p.bitmap.Width / 4 * (animation_ctrl % 4), 
+            Rectangle crazycoderRgl = new Rectangle(p.bitmap.Width / 4 * (p.anm_frame % 4), 
                 p.bitmap.Height / 4 * (p.face - 1), 
                 p.bitmap.Width / 4, 
                 p.bitmap.Height / 4);
@@ -91,6 +112,13 @@ namespace rpg
             player[newIndex].x = player[oldIndex].x;
             player[newIndex].y = player[oldIndex].y;
             player[newIndex].face = player[oldIndex].face;
+        }
+
+        public static void key_ctrl_up(Player[] player, KeyEventArgs e)
+        {
+            Player p = player[current_player];
+            p.anm_frame = 0;
+            p.last_walk_time = 0;
         }
     }
 }

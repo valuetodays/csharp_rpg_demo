@@ -46,7 +46,7 @@ namespace rpg
             if (!flag)
             {
                 MessageBox.Show("启动失败：找不到资源文件。");
-                Common.exit();
+                Comm.exit();
             }
             Console.WriteLine("========使用模式 " + assetContext.getName() + " 运行程序。========");
             return assetContext.getBasePath();
