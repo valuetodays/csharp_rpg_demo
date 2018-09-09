@@ -10,12 +10,30 @@ namespace rpg
 {
     public partial class Form1 : Form
     {
-        Player player = new Player();
+        Player[] player = new Player[3];
         int animation_ctrl = 0;
         public Form1()
         {
             InitializeComponent();
-            Draw();
+        }
+
+        public void Form1_Load(object sender, EventArgs e)
+        {
+            player[0] = new rpg.Player();
+            player[0].bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("r1.png"));
+            player[0].bitmap.SetResolution(96, 96);
+            player[0].is_active = 1;
+
+            player[1] = new rpg.Player();
+            player[1].bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("r2.png"));
+            player[1].bitmap.SetResolution(96, 96);
+            player[1].is_active = 1;
+
+            player[2] = new rpg.Player();
+            player[2].bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("r3.png"));
+            player[2].bitmap.SetResolution(96, 96);
+            player[2].is_active = 1;
+
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -30,7 +48,7 @@ namespace rpg
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
             animation_ctrl += 1;
-            player.draw(g, animation_ctrl);
+            Player.draw(player, g, animation_ctrl);
             myBuffer.Render();
             myBuffer.Dispose();
         }
@@ -40,7 +58,7 @@ namespace rpg
             Console.WriteLine("form1.keydown");
 
             pictureBox1.Refresh();
-            player.key_ctrl(e);
+            Player.key_ctrl(player, e);
             Draw();
         }
     }
