@@ -12,7 +12,7 @@ namespace rpg
     {
         public static Player[] player = new Player[3];
         public static Map[] map = new Map[2];
-        public static Npc[] npc = new Npc[4];
+        public static Npc[] npc = new Npc[5];
         public static WMPLib.WindowsMediaPlayer music_player = new WMPLib.WindowsMediaPlayer();
         public Form1()
         {
@@ -75,6 +75,21 @@ namespace rpg
             npc[3].region_y = 400;
             npc[3].collision_type = Npc.Collision_type.ENTER;
 
+            npc[4] = new Npc();
+            npc[4].map = 1;
+            npc[4].x = 700;
+            npc[4].y = 350;
+            npc[4].bitmap_path = ResourceContextDeterminer.GetAssetPath("npc3.png");
+            npc[4].collision_type = Npc.Collision_type.KEY;
+            Animation npc4anm1 = new Animation();
+            npc4anm1.bitmap_path = ResourceContextDeterminer.GetAssetPath("anm1.png");
+            npc4anm1.row = 2;
+            npc4anm1.col = 2;
+            npc4anm1.max_frame = 3;
+            npc4anm1.anm_rate = 4;
+            npc[4].anm = new Animation[1];
+            npc[4].anm[0] = npc4anm1;
+
             Map.change_map(map, player, npc, 0, 30, 500, 1, music_player);
         }
 
@@ -101,13 +116,18 @@ namespace rpg
 
             //stage.Refresh();
             Player.key_ctrl(player, map, npc, e);
-            Draw();
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             Player.key_ctrl_up(player, e);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine("timer1_Tick.");
             Draw();
         }
+
     }
 }

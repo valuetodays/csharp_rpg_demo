@@ -21,12 +21,25 @@ namespace rpg
         public int region_y = 60;
         public Collision_type collision_type = Collision_type.KEY;
 
+        public Animation[] anm;
+        public int anm_frame = 0;
+        public int current_anm = -1;
+        public long last_anm_time = 0;
+
         public void load()
         {
             if (Comm.isNotNullOrEmptyString(bitmap_path))
             {
                 bitmap = new Bitmap(bitmap_path);
                 bitmap.SetResolution(96, 96);
+            }
+
+            if (anm != null)
+            {
+                for (int i = 0; i < anm.Length; i++)
+                {
+                    anm[i].load();
+                }
             }
         }
 
@@ -36,6 +49,14 @@ namespace rpg
             {
                 bitmap = null;
             }
+
+            if (anm != null)
+            {
+                for (int i = 0; i < anm.Length; i++)
+                {
+                    anm[i].unload();
+                }
+            }
         }
 
         public void draw(Graphics g, int map_sx, int map_sy)
@@ -44,11 +65,17 @@ namespace rpg
             {
                 return;
             }
-
-            if (bitmap != null)
+            if (current_anm < 0) // 绘制角色
             {
-                g.DrawImage(bitmap, map_sx + x + x_offset, map_sy + y + y_offset);
+                if (bitmap != null)
+                {
+                    g.DrawImage(bitmap, map_sx + x + x_offset, map_sy + y + y_offset);
+                }
+            } else // 绘制动画
+            {
+                draw_anm(g, map_sx, map_sy);
             }
+
         }
 
         public bool is_collision(int collision_x, int collision_y)
@@ -79,6 +106,40 @@ namespace rpg
             }
 
             return false;
+        }
+
+        public void draw_anm(Graphics g, int map_sx, int map_sy)
+        {
+            if (anm == null 
+                || current_anm >= anm.Length
+                || anm[current_anm] == null
+                || anm[current_anm].bitmap_path == null
+                )
+            {
+                current_anm = -1;
+                anm_frame = 0;
+                last_anm_time = 0;
+                return;
+            }
+
+            anm[current_anm].draw(g, anm_frame, map_sx + x + x_offset, map_sy + y + y_offset);
+
+            if (Comm.Time() - last_anm_time >= Animation.REATE)
+            {
+                anm_frame++;
+                last_anm_time = Comm.Time();
+                if (anm_frame / anm[current_anm].anm_rate >= anm[current_anm].max_frame)
+                {
+                    current_anm = -1;
+                    anm_frame = 0;
+                    last_anm_time = 0;
+                }
+            }
+        }
+
+        public void play_anm(int index) {
+            current_anm = index;
+            anm_frame = 0;
         }
 
         public enum Collision_type

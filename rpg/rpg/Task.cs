@@ -22,6 +22,9 @@ namespace rpg
             } else if (i == 3)
             {
                 Map.change_map(Form1.map, Form1.player, Form1.npc, 0, 45, 550, 3, Form1.music_player);
+            } else if (i == 4)
+            {
+                Form1.npc[4].play_anm(0);
             }
         }
     }
