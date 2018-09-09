@@ -26,6 +26,16 @@ namespace rpg
         public int current_anm = -1;
         public long last_anm_time = 0;
 
+        public Npc_type npc_type = Npc_type.NORMAL;
+        public Comm.Direction face = Comm.Direction.DOWN;
+        public int walk_frame = 0;
+        public long last_walk_time = 0;
+        public long walk_interval = 80;
+        public int speed = 40;
+        public Comm.Direction idle_walk_direction = Comm.Direction.DOWN;
+        public int idle_walk_time = 0;
+        public int idle_walk_time_now = 0;
+
         public void load()
         {
             if (Comm.isNotNullOrEmptyString(bitmap_path))
@@ -67,15 +77,91 @@ namespace rpg
             }
             if (current_anm < 0) // 绘制角色
             {
-                if (bitmap != null)
+                if (npc_type == Npc_type.NORMAL)
                 {
-                    g.DrawImage(bitmap, map_sx + x + x_offset, map_sy + y + y_offset);
+                    if (bitmap != null)
+                    {
+                        g.DrawImage(bitmap, map_sx + x + x_offset, map_sy + y + y_offset);
+                    }
+                } else if (npc_type == Npc_type.CHARACTER)
+                {
+                    draw_character(g, map_sx, map_sy);
                 }
+
             } else // 绘制动画
             {
                 draw_anm(g, map_sx, map_sy);
             }
 
+        }
+
+        public void walk(Map[] map, Comm.Direction direction, bool isblock)
+        {
+            face = direction;
+            if (Comm.Time() - last_walk_time <= walk_interval)
+            {
+                return;
+            }
+
+            if (direction == Comm.Direction.UP && (!isblock || Map.can_through(map, x,  y - speed)))
+            {
+                y -= speed;
+            } else if (direction == Comm.Direction.DOWN && (!isblock || Map.can_through(map, x, y+ speed))) {
+                y += speed;
+            } else if (direction == Comm.Direction.LEFT && (!isblock || Map.can_through(map, x - speed, y)))
+            {
+                x -= speed;
+            } else if (direction == Comm.Direction.RIGHT && (!isblock || Map.can_through(map, x+speed, y)))
+            {
+                x += speed;
+            }
+
+            walk_frame++;
+            if (walk_frame >= int.MaxValue)
+            {
+                walk_frame = 0;
+            }
+            last_walk_time = Comm.Time();
+        }
+
+        public void stop_walk()
+        {
+            walk_frame = 0;
+            last_walk_time = 0;
+        }
+
+        public void timer_logic(Map[] map)
+        {
+            if (npc_type == Npc_type.CHARACTER && idle_walk_time != 0)
+            {
+                Comm.Direction direction;
+                if (idle_walk_time_now >= 0)
+                {
+                    direction = idle_walk_direction;
+                } else
+                {
+                    direction = Comm.opposite_direction(idle_walk_direction);
+                }
+
+                walk(map, direction, true);
+
+                if (idle_walk_time_now >= 0)
+                {
+                    idle_walk_time_now++;
+                    if (idle_walk_time_now > idle_walk_time)
+                    {
+                        idle_walk_time_now = -1;
+                    }
+                } else if (idle_walk_time_now < 0)
+                {
+                    idle_walk_time_now--;
+                    if ( idle_walk_time_now < -idle_walk_time)
+                    {
+                        idle_walk_time_now = 1;
+                    }
+                }
+
+            }
         }
 
         public bool is_collision(int collision_x, int collision_y)
@@ -142,10 +228,34 @@ namespace rpg
             anm_frame = 0;
         }
 
+
+        public void draw_character(Graphics g, int map_sx, int map_sy)
+        {
+            Rectangle rect = new Rectangle(
+                bitmap.Width / 4 * (walk_frame % 4),
+                bitmap.Height / 4 * ((int)face - 1),
+                bitmap.Width / 4,
+                bitmap.Height / 4    
+                );
+            Bitmap bitmap0 = bitmap.Clone(rect, bitmap.PixelFormat);
+            g.DrawImage(bitmap0, map_sx + x + x_offset, map_sy + y + y_offset);
+        }
+
+
+
         public enum Collision_type
         {
             KEY = 1,
             ENTER = 2,
         }
+
+        public enum Npc_type
+        {
+            NORMAL = 0,
+            CHARACTER = 1,
+        }
+
     }
+
+
 }

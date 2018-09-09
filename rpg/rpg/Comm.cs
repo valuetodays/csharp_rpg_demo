@@ -23,23 +23,23 @@ namespace rpg
             System.Environment.Exit(0);
         }
 
-        public static int opposite_direction(int direction)
+        public static Comm.Direction opposite_direction(Comm.Direction direction)
         {
-            if (direction == Constants.DIRECTION_UP)
+            if (direction == Comm.Direction.UP)
             {
-                return Constants.DIRECTION_DOWN;
+                return Comm.Direction.DOWN;
             }
-            else if (direction == Constants.DIRECTION_DOWN)
+            else if (direction == Comm.Direction.DOWN)
             {
-                return Constants.DIRECTION_UP;
+                return Comm.Direction.UP;
             }
-            else if (direction == Constants.DIRECTION_LEFT)
+            else if (direction == Comm.Direction.LEFT)
             {
-                return Constants.DIRECTION_RIGHT;
+                return Comm.Direction.RIGHT;
             }
-            else if (direction == Constants.DIRECTION_RIGHT)
+            else if (direction == Comm.Direction.RIGHT)
             {
-                return Constants.DIRECTION_LEFT;
+                return Comm.Direction.LEFT;
             }
             throw new Exception("获取相反方向时出错！");
         }

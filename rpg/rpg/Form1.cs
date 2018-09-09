@@ -12,7 +12,7 @@ namespace rpg
     {
         public static Player[] player = new Player[3];
         public static Map[] map = new Map[2];
-        public static Npc[] npc = new Npc[5];
+        public static Npc[] npc = new Npc[6];
         public static WMPLib.WindowsMediaPlayer music_player = new WMPLib.WindowsMediaPlayer();
         public Form1()
         {
@@ -90,6 +90,17 @@ namespace rpg
             npc[4].anm = new Animation[1];
             npc[4].anm[0] = npc4anm1;
 
+            npc[5] = new Npc();
+            npc[5].map = 1;
+            npc[5].x = 450;
+            npc[5].y = 300;
+            npc[5].bitmap_path = ResourceContextDeterminer.GetAssetPath("npc4.png");
+            npc[5].collision_type = Npc.Collision_type.KEY;
+            npc[5].npc_type = Npc.Npc_type.CHARACTER;
+            npc[5].idle_walk_direction = Comm.Direction.LEFT;
+            npc[5].idle_walk_time = 20;
+
+
             Map.change_map(map, player, npc, 0, 30, 500, 1, music_player);
         }
 
@@ -126,6 +137,13 @@ namespace rpg
         private void timer1_Tick(object sender, EventArgs e)
         {
             Console.WriteLine("timer1_Tick.");
+            for (int i = 0; i < npc.Length; i++)
+            {
+                if (npc[i] != null && npc[i].map == Map.current_map)
+                {
+                    npc[i].timer_logic(map);
+                }
+            }
             Draw();
         }
 
