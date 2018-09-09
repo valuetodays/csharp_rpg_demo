@@ -52,6 +52,7 @@
     <Compile Include="Layer_sort.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Npc.cs" />
+    <Compile Include="Panel.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

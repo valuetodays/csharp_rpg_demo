@@ -102,6 +102,9 @@ namespace rpg
 
 
             Map.change_map(map, player, npc, 0, 30, 500, 1, music_player);
+            Panel.Button b = new Panel.Button();
+            b.click_event += new Panel.Button.Click_event(tryevent);
+            b.click();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -145,6 +148,11 @@ namespace rpg
                 }
             }
             Draw();
+        }
+
+        public void tryevent()
+        {
+            MessageBox.Show("kkkkk");
         }
 
     }
