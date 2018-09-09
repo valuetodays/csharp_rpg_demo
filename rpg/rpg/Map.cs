@@ -14,6 +14,8 @@ namespace rpg
         public Bitmap shade;
         public string block_path;
         public Bitmap block;
+        public string back_path;
+        public Bitmap back;
 
         public static void draw(Map[] map, Graphics g)
         {
@@ -35,13 +37,31 @@ namespace rpg
             {
                 map[current_map].block = null;
             }
+            if (map[current_map].back != null)
+            {
+                map[current_map].back = null;
+            }
 
-            map[newIndex].bitmap = new Bitmap(map[newIndex].bitmap_path);
-            map[newIndex].bitmap.SetResolution(96, 96);
-            map[newIndex].shade = new Bitmap(map[newIndex].shade_path);
-            map[newIndex].shade.SetResolution(96, 96);
-            map[newIndex].block = new Bitmap(map[newIndex].block_path);
-            map[newIndex].block.SetResolution(96, 96);
+            if (Comm.isNotNullOrEmptyString(map[newIndex].bitmap_path))
+            {
+                map[newIndex].bitmap = new Bitmap(map[newIndex].bitmap_path);
+                map[newIndex].bitmap.SetResolution(96, 96);
+            }
+            if (Comm.isNotNullOrEmptyString(map[newIndex].shade_path))
+            {
+                map[newIndex].shade = new Bitmap(map[newIndex].shade_path);
+                map[newIndex].shade.SetResolution(96, 96);
+            }
+            if (Comm.isNotNullOrEmptyString(map[newIndex].block_path))
+            {
+                map[newIndex].block = new Bitmap(map[newIndex].block_path);
+                map[newIndex].block.SetResolution(96, 96);
+            }
+            if (Comm.isNotNullOrEmptyString(map[newIndex].back_path))
+            {
+                map[newIndex].back = new Bitmap(map[newIndex].back_path);
+                map[newIndex].back.SetResolution(96, 96);
+            }
 
             current_map = newIndex;
 
@@ -80,6 +100,10 @@ namespace rpg
                 map_sy = stage.Height / 2 - p_y;
             }
 
+            if (m.back != null)
+            {
+                g.DrawImage(m.back, 0, 0);
+            }
             g.DrawImage(m.bitmap, map_sx, map_sy);
             Player.draw(player, g, map_sx, map_sy);
             g.DrawImage(m.shade, map_sx, map_sy);

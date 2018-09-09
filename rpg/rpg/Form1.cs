@@ -38,6 +38,7 @@ namespace rpg
             map[0].bitmap_path = ResourceContextDeterminer.GetAssetPath("map1.png");
             map[0].shade_path = ResourceContextDeterminer.GetAssetPath("map1_shade.png");
             map[0].block_path = ResourceContextDeterminer.GetAssetPath("map1_block.png");
+            map[0].back_path = ResourceContextDeterminer.GetAssetPath("map1_back.png");
 
             map[1] = new Map();
             map[1].bitmap_path = ResourceContextDeterminer.GetAssetPath("map2.png");

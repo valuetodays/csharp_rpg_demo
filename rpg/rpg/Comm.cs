@@ -44,5 +44,15 @@ namespace rpg
             throw new Exception("获取相反方向时出错！");
         }
 
+        public static bool isNullOrEmptyString(string str)
+        {
+            return str == null || str.Length == 0;
+        }
+
+        public static bool isNotNullOrEmptyString(string str)
+        {
+            return str != null && str.Length > 0;
+        }
+
     }
 }
