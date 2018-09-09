@@ -5,7 +5,7 @@ using System.Text;
 
 namespace rpg
 {
-    class Map
+    public class Map
     {
         public static int current_map = 0;
         public string bitmap_path;

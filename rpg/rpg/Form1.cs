@@ -10,10 +10,10 @@ namespace rpg
 {
     public partial class Form1 : Form
     {
-        Player[] player = new Player[3];
-        Map[] map = new Map[2];
-        Npc[] npc = new Npc[2];
-        WMPLib.WindowsMediaPlayer music_player = new WMPLib.WindowsMediaPlayer();
+        public static Player[] player = new Player[3];
+        public static Map[] map = new Map[2];
+        public static Npc[] npc = new Npc[4];
+        public static WMPLib.WindowsMediaPlayer music_player = new WMPLib.WindowsMediaPlayer();
         public Form1()
         {
             InitializeComponent();
@@ -54,7 +54,26 @@ namespace rpg
             npc[0].x = 700;
             npc[0].y = 300;
             npc[0].bitmap_path = ResourceContextDeterminer.GetAssetPath("npc1.png");
+            npc[1] = new rpg.Npc();
+            npc[1].map = 0;
+            npc[1].x = 900;
+            npc[1].y = 300;
+            npc[1].bitmap_path = ResourceContextDeterminer.GetAssetPath("npc2.png");
 
+            npc[2] = new Npc();
+            npc[2].map = 0;
+            npc[2].x = 20;
+            npc[2].y = 600;
+            npc[2].region_x = 40;
+            npc[2].region_y = 400;
+            npc[2].collision_type = Npc.Collision_type.ENTER;
+            npc[3] = new Npc();
+            npc[3].map = 1;
+            npc[3].x = 980;
+            npc[3].y = 600;
+            npc[3].region_x = 40;
+            npc[3].region_y = 400;
+            npc[3].collision_type = Npc.Collision_type.ENTER;
 
             Map.change_map(map, player, npc, 0, 30, 500, 1, music_player);
         }
@@ -78,10 +97,10 @@ namespace rpg
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("form1.keydown");
+           // Console.WriteLine("form1.keydown");
 
-            stage.Refresh();
-            Player.key_ctrl(player, map, e);
+            //stage.Refresh();
+            Player.key_ctrl(player, map, npc, e);
             Draw();
         }
 

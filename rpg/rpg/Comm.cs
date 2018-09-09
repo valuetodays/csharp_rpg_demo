@@ -4,7 +4,7 @@ using System.Text;
 
 namespace rpg
 {
-    class Comm
+    public class Comm
     {
         public static long Time()
         {
@@ -52,6 +52,15 @@ namespace rpg
         public static bool isNotNullOrEmptyString(string str)
         {
             return str != null && str.Length > 0;
+        }
+
+
+        public enum Direction
+        {
+            UP = 4,
+            DOWN = 1,
+            RIGHT = 3,
+            LEFT = 2,
         }
 
     }

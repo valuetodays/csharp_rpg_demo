@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace rpg
 {
-    class Player
+    public class Player
     {
         public int x = 50;
         public int y = 50;
@@ -20,6 +20,7 @@ namespace rpg
         public int is_active = 0;
         public int x_offset = -120;
         public int y_offset = -220;
+        public int collision_ray = 50;
 
         public Player()
         {
@@ -27,7 +28,7 @@ namespace rpg
             bitmap.SetResolution(96, 96);
         }
 
-        public static void key_ctrl(Player[] player, Map[] map, KeyEventArgs e)
+        public static void key_ctrl(Player[] player, Map[] map, Npc[] npc, KeyEventArgs e)
         {
             Player p = player[current_player];
 
@@ -36,43 +37,23 @@ namespace rpg
                 key_change_player(player);
             }
 
-            if (e.KeyCode == Keys.Up && p.face != 4)
+            if (e.KeyCode == Keys.Up)
             {
-                p.face = 4;
+                walk(player, map, Comm.Direction.UP);
             }
-            else if (e.KeyCode == Keys.Down && p.face != 1)
+            else if (e.KeyCode == Keys.Down)
             {
-                p.face = 1;
+                walk(player, map, Comm.Direction.DOWN);
             }
-            else if (e.KeyCode == Keys.Left && p.face != 2)
+            else if (e.KeyCode == Keys.Left)
             {
-                p.face = 2;
+                walk(player, map, Comm.Direction.LEFT);
             }
-            else if (e.KeyCode == Keys.Right && p.face != 3)
+            else if (e.KeyCode == Keys.Right)
             {
-                p.face = 3;
+                walk(player, map, Comm.Direction.RIGHT);
             }
-            // 间隔判定
-            if (e.KeyCode == Keys.Up && Map.can_through(map, p.x, p.y - p.speed))
-            {
-                p.y = p.y - p.speed;
-            } else if (e.KeyCode == Keys.Down && Map.can_through(map, p.x, p.y + p.speed))
-            {
-                p.y = p.y + p.speed;
-            } else if (e.KeyCode == Keys.Left && Map.can_through(map, p.x - p.speed, p.y))
-            {
-                p.x = p.x - p.speed;
-            } else if (e.KeyCode == Keys.Right && Map.can_through(map, p.x + p.speed, p.y))
-            {
-                p.x = p.x + p.speed;
-            }
-
-            p.anm_frame++;
-            if (p.anm_frame >= int.MaxValue)
-            {
-                p.anm_frame = 0;
-            }
-            p.last_walk_time = Comm.Time();
+            npc_collision(player, map, npc, e);
         }
 
         public static void set_pos(Player[] player, int x, int y, int face)
@@ -143,6 +124,98 @@ namespace rpg
         public static int get_pos_face(Player[] player)
         {
             return player[current_player].face;
+        }
+
+        public static void walk(Player[] player, Map[] map, Comm.Direction direction)
+        {
+            Player p = player[current_player];
+            p.face = (int)direction;
+            if (Comm.Time() - p.last_walk_time <= p.walk_interval)
+            {
+                return;
+            }
+
+            if (direction == Comm.Direction.UP && Map.can_through(map, p.x, p.y - p.speed))
+            {
+                p.y = p.y - p.speed;
+            } else if (direction == Comm.Direction.DOWN && Map.can_through(map, p.x, p.y + p.speed))
+            {
+                p.y = p.y + p.speed;
+            } else if (direction == Comm.Direction.LEFT && Map.can_through(map, p.x - p.speed, p.y))
+            {
+                p.x = p.x - p.speed;
+            } else if (direction == Comm.Direction.RIGHT && Map.can_through(map, p.x + p.speed, p.y))
+            {
+                p.x = p.x + p.speed;
+            }
+
+            p.anm_frame++;
+            if (p.anm_frame >= int.MaxValue)
+            {
+                p.anm_frame = 0;
+            }
+            p.last_walk_time = Comm.Time();
+        }
+
+        public static Point get_collision_point(Player[] player)
+        {
+            Player p = player[current_player];
+            int collision_x = 0;
+            int collision_y = 0;
+            collision_x = p.x;
+            collision_y = p.y;
+
+            if (p.face == (int)Comm.Direction.UP)
+            {
+                collision_y = p.y - p.collision_ray;
+            } else if (p.face == (int)Comm.Direction.DOWN) 
+            {
+                collision_y = p.y + p.collision_ray;
+            } else if (p.face == (int)Comm.Direction.LEFT)
+            {
+                collision_x = p.x - p.collision_ray;
+            } else if (p.face == (int)Comm.Direction.RIGHT)
+            {
+                collision_x = p.x + p.collision_ray;
+            }
+            return new Point(collision_x, collision_y);
+        }
+
+        public static void npc_collision(Player[] player, Map[] map, Npc[] npc, KeyEventArgs e)        {
+            Player p = player[current_player];
+            Point p1 = new Point(p.x, p.y);
+            Point p2 = get_collision_point(player);
+
+            for (int i = 0; i < npc.Length; i++)
+            {
+                Npc n = npc[i];
+                Console.WriteLine(">>" + i);
+                if (n == null)
+                {
+                    continue;
+                }
+                if (n.map != Map.current_map)
+                {
+                    continue;
+                }
+                
+                if (n.is_line_collision(p1, p2))
+                {
+                    if (n.collision_type == Npc.Collision_type.ENTER)
+                    {
+                        
+                        Task.story(i);
+                        break;
+                    } else if (n.collision_type == Npc.Collision_type.KEY)
+                    {
+                        if (e.KeyCode == Keys.Space || e.KeyCode == Keys.Enter)
+                        {
+                            Task.story(i);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
