@@ -59,6 +59,7 @@
     <Compile Include="ResourceContextDeterminer.cs" />
     <Compile Include="ResourcePathContext.cs" />
     <Compile Include="Task.cs" />
+    <Compile Include="Title.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

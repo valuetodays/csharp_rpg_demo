@@ -105,6 +105,9 @@ namespace rpg
             Panel.Button b = new Panel.Button();
             b.click_event += new Panel.Button.Click_event(tryevent);
             b.click();
+            
+            Title.init();
+            Title.show();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
