@@ -11,6 +11,7 @@ namespace rpg
     public partial class Form1 : Form
     {
         Player[] player = new Player[3];
+        Map[] map = new Map[2];
         public Form1()
         {
             InitializeComponent();
@@ -33,6 +34,14 @@ namespace rpg
             player[2].bitmap.SetResolution(96, 96);
             player[2].is_active = 1;
 
+            map[0] = new Map();
+            map[0].bitmap_path = ResourceContextDeterminer.GetAssetPath("map1.png");
+
+            map[1] = new Map();
+            map[1].bitmap_path = ResourceContextDeterminer.GetAssetPath("map2.png");
+
+
+            Map.change_map(map, player, 0, 0, 0, 1);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -46,6 +55,7 @@ namespace rpg
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
+            Map.draw(map, g);
             Player.draw(player, g);
             myBuffer.Render();
             myBuffer.Dispose();

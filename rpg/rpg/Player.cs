@@ -73,6 +73,13 @@ namespace rpg
             p.last_walk_time = Comm.Time();
         }
 
+        public static void set_pos(Player[] player, int x, int y, int face)
+        {
+            player[current_player].x = x;
+            player[current_player].y = y;
+            player[current_player].face = face;
+        }
+
         public static void draw(Player[] player, Graphics g) 
         {
             Player p = player[current_player];

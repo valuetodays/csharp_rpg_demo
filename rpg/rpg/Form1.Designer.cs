@@ -34,9 +34,9 @@
             // 
             // stage
             // 
-            this.stage.Location = new System.Drawing.Point(-4, 47);
+            this.stage.Location = new System.Drawing.Point(-4, -1);
             this.stage.Name = "stage";
-            this.stage.Size = new System.Drawing.Size(670, 469);
+            this.stage.Size = new System.Drawing.Size(675, 517);
             this.stage.TabIndex = 0;
             this.stage.TabStop = false;
             this.stage.Click += new System.EventHandler(this.pictureBox1_Click);
