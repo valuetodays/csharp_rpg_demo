@@ -118,7 +118,12 @@ namespace rpg
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
+            
             Map.draw(map, player, npc, g, new Rectangle(0, 0, stage.Width, stage.Height));
+            if (Panel.panel != null)
+            {
+                Panel.draw(g);
+            }
             
             myBuffer.Render();
             myBuffer.Dispose();
@@ -130,6 +135,11 @@ namespace rpg
 
             //stage.Refresh();
             Player.key_ctrl(player, map, npc, e);
+            if (Panel.panel != null)
+            {
+                Panel.key_ctrl(e);
+            }
+            
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
