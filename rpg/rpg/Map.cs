@@ -12,6 +12,8 @@ namespace rpg
         public Bitmap bitmap;
         public string shade_path;
         public Bitmap shade;
+        public string block_path;
+        public Bitmap block;
 
         public static void draw(Map[] map, Graphics g)
         {
@@ -29,10 +31,17 @@ namespace rpg
             {
                 map[current_map].shade = null;
             }
+            if (map[current_map].block != null)
+            {
+                map[current_map].block = null;
+            }
+
             map[newIndex].bitmap = new Bitmap(map[newIndex].bitmap_path);
             map[newIndex].bitmap.SetResolution(96, 96);
             map[newIndex].shade = new Bitmap(map[newIndex].shade_path);
             map[newIndex].shade.SetResolution(96, 96);
+            map[newIndex].block = new Bitmap(map[newIndex].block_path);
+            map[newIndex].block.SetResolution(96, 96);
 
             current_map = newIndex;
 
@@ -74,6 +83,32 @@ namespace rpg
             g.DrawImage(m.bitmap, map_sx, map_sy);
             Player.draw(player, g, map_sx, map_sy);
             g.DrawImage(m.shade, map_sx, map_sy);
+        }
+
+        public static bool can_through(Map[] map, int x, int y)
+        {
+            Map m = map[current_map];
+
+            if (x < 0)
+            {
+                return false;
+            } else if (x >= m.block.Width)
+            {
+                return false;
+            }
+            if (y < 0)
+            {
+                return false;
+            } else if (y >= m.block.Height)
+            {
+                return false;
+            }
+
+            if (m.block.GetPixel(x, y).B == 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

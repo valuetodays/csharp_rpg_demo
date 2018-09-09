@@ -37,13 +37,15 @@ namespace rpg
             map[0] = new Map();
             map[0].bitmap_path = ResourceContextDeterminer.GetAssetPath("map1.png");
             map[0].shade_path = ResourceContextDeterminer.GetAssetPath("map1_shade.png");
+            map[0].block_path = ResourceContextDeterminer.GetAssetPath("map1_block.png");
 
             map[1] = new Map();
             map[1].bitmap_path = ResourceContextDeterminer.GetAssetPath("map2.png");
             map[1].shade_path = ResourceContextDeterminer.GetAssetPath("map2_shade.png");
+            map[1].block_path = ResourceContextDeterminer.GetAssetPath("map2_block.png");
 
 
-            Map.change_map(map, player, 0, 0, 0, 1);
+            Map.change_map(map, player, 0, 30, 500, 1);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -68,7 +70,7 @@ namespace rpg
             Console.WriteLine("form1.keydown");
 
             stage.Refresh();
-            Player.key_ctrl(player, e);
+            Player.key_ctrl(player, map, e);
             Draw();
         }
 

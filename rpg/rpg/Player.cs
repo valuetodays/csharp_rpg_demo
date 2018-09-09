@@ -25,7 +25,7 @@ namespace rpg
             bitmap.SetResolution(96, 96);
         }
 
-        public static void key_ctrl(Player[] player, KeyEventArgs e)
+        public static void key_ctrl(Player[] player, Map[] map, KeyEventArgs e)
         {
             Player p = player[current_player];
 
@@ -51,16 +51,16 @@ namespace rpg
                 p.face = 3;
             }
             // 间隔判定
-            if (e.KeyCode == Keys.Up)
+            if (e.KeyCode == Keys.Up && Map.can_through(map, p.x, p.y - p.speed))
             {
                 p.y = p.y - p.speed;
-            } else if (e.KeyCode == Keys.Down)
+            } else if (e.KeyCode == Keys.Down && Map.can_through(map, p.x, p.y + p.speed))
             {
                 p.y = p.y + p.speed;
-            } else if (e.KeyCode == Keys.Left)
+            } else if (e.KeyCode == Keys.Left && Map.can_through(map, p.x - p.speed, p.y))
             {
                 p.x = p.x - p.speed;
-            } else if (e.KeyCode == Keys.Right)
+            } else if (e.KeyCode == Keys.Right && Map.can_through(map, p.x + p.speed, p.y))
             {
                 p.x = p.x + p.speed;
             }
