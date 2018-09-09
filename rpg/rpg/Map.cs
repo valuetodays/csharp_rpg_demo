@@ -35,8 +35,11 @@ namespace rpg
         {
             Map m = map[current_map];
             int map_w = m.bitmap.Width;
-            int map_sx = 0;
+            int map_h = m.bitmap.Height;
             int p_x = Player.get_pos_x(player);
+            int p_y = Player.get_pos_y(player);
+            int map_sx = 0;
+            int map_sy = 0;
 
             if (p_x <= stage.Width/2)
             {
@@ -49,8 +52,19 @@ namespace rpg
                 map_sx = stage.Width / 2 - p_x;
             }
 
-            g.DrawImage(m.bitmap, map_sx, 0);
-            Player.draw(player, g, map_sx, 0);
+            if (p_y <= stage.Height / 2)
+            {
+                map_sy = 0;
+            } else if (p_y >= map_h - stage.Height/2)
+            {
+                map_sy = stage.Height - map_h;
+            } else
+            {
+                map_sy = stage.Height / 2 - p_y;
+            }
+
+            g.DrawImage(m.bitmap, map_sx, map_sy);
+            Player.draw(player, g, map_sx, map_sy);
         }
     }
 }
