@@ -6,6 +6,7 @@ namespace rpg
     public static class Title
     {
         public static Panel title = new Panel();
+        public static Panel confirm = new Panel();
         public static string title_music = "2.mp3";
         
         public static Bitmap bg_1 = new Bitmap(ResourceContextDeterminer.GetAssetPath("T_bg1.png"));
@@ -56,6 +57,34 @@ namespace rpg
             
             title.draw_event += new Panel.Draw_event(drawtitle);
             
+            
+            Panel.Button btn_yes = new Panel.Button();
+            btn_yes.set(42, 60, 0, 0, 
+                ResourceContextDeterminer.GetAssetPath("confirm_yes_1.png"), 
+                ResourceContextDeterminer.GetAssetPath("confirm_yes_2.png"), 
+                ResourceContextDeterminer.GetAssetPath("confirm_yes_2.png"),
+                -1, 1, -1, -1);
+            btn_yes.click_event += new Panel.Button.Click_event(confirm_yes);
+            
+            Panel.Button btn_no = new Panel.Button();
+            btn_no.set(42, 100, 0, 0, 
+                ResourceContextDeterminer.GetAssetPath("confirm_no_1.png"),
+                ResourceContextDeterminer.GetAssetPath("confirm_no_2.png"), 
+                ResourceContextDeterminer.GetAssetPath("confirm_no_2.png"),
+                0, -1, -1, -1);
+            btn_no.click_event += new Panel.Button.Click_event(confirm_no);
+            
+            confirm.button = new Panel.Button[2];
+            confirm.button[0] = btn_yes;
+            confirm.button[1] = btn_no;
+            confirm.set(283, 250, ResourceContextDeterminer.GetAssetPath("confirm_bg.png"), 0, 1);
+            confirm.init();
+            confirm.drawbg_event += new Panel.Drawbg_event(drawconfirm);
+        }
+
+        public static void drawconfirm(Graphics g, int x_offset, int y_offset)
+        {
+            title.draw_me(g);
         }
 
         public static void show()
@@ -75,7 +104,7 @@ namespace rpg
         }  
         public static void exitgame()
         {
-            MessageBox.Show("ExitGame");
+            confirm.show();
         }
 
         public static void drawtitle(Graphics g, int x_offset, int y_offset)
@@ -104,5 +133,15 @@ namespace rpg
             }
            
         }
+
+        public static void confirm_yes()
+        {
+            Application.Exit();
+        }
+        public static void confirm_no()
+        {
+            title.show();
+        }
+        
     }
 }
