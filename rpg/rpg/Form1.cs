@@ -108,6 +108,8 @@ namespace rpg
             
             Title.init();
             Title.show();
+            
+            Message.init();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

@@ -12,6 +12,8 @@ namespace rpg
             DialogResult dialogResult;
             if (i == 0)
             {
+                Message.show("主角", "夏山如碧，绿树成荫，总会令人怡然笛自乐。此地山青水秀，我十分喜欢。我们便相约好了，闲暇时，便来此地，沏茶共饮。",
+                    ResourceContextDeterminer.GetAssetPath("face1_1.png"), Message.Face.LEFT);
                 dialogResult = MessageBox.Show("我是女孩");
             } else if (i == 1)
             {
