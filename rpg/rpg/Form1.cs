@@ -21,6 +21,9 @@ namespace rpg
 
         public void Form1_Load(object sender, EventArgs e)
         {
+            Title.init();
+            Message.init();
+            
             player[0] = new rpg.Player();
             player[0].bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("r1.png"));
             player[0].bitmap.SetResolution(96, 96);
@@ -102,14 +105,14 @@ namespace rpg
 
 
             Map.change_map(map, player, npc, 0, 30, 500, 1, music_player);
+           /*
             Panel.Button b = new Panel.Button();
             b.click_event += new Panel.Button.Click_event(tryevent);
-            b.click();
+            b.click();*/
             
-            Title.init();
+
             Title.show();
             
-            Message.init();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

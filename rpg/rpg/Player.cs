@@ -21,6 +21,16 @@ namespace rpg
         public int x_offset = -120;
         public int y_offset = -220;
         public int collision_ray = 50;
+        
+        public enum Status
+        {
+            WALK = 1,
+            PANEL = 2,
+            TASK = 3,
+            FIGHT = 4,
+        }
+
+        public static Status status = Status.WALK;
 
         public Player()
         {
@@ -30,6 +40,10 @@ namespace rpg
 
         public static void key_ctrl(Player[] player, Map[] map, Npc[] npc, KeyEventArgs e)
         {
+            if (Player.status != Status.WALK)
+            {
+                return;                
+            }
             Player p = player[current_player];
 
             if (e.KeyCode == Keys.Tab)

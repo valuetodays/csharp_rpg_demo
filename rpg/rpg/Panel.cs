@@ -7,6 +7,7 @@ namespace rpg
     public class Panel
     {
         public static Panel panel = null;
+        private static Player.Status last_player_status = Player.Status.WALK;
 
         public int x;
         public int y;
@@ -53,11 +54,18 @@ namespace rpg
             panel = this;
             current_button = default_button;
             set_button_status(Button.Status.SELECT);
+            if (Player.status != Player.Status.PANEL)
+            {
+                last_player_status = Player.status;
+            }
+
+            Player.status = Player.Status.PANEL;
         }
 
         public void hide()
         {
             panel = null;
+            Player.status = last_player_status;
         }
 
         public void set_button_status(Button.Status status)
