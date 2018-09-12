@@ -115,9 +115,20 @@ namespace rpg
             
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void stage_MouseMove(object sender, MouseEventArgs e)
         {
+            if (Panel.panel != null)
+            {
+                Panel.mouse_move(e);
+            }
+        }
 
+        private void stage_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (Panel.panel != null)
+            {
+                Panel.mouse_click(e);
+            }
         }
 
         private void Draw()

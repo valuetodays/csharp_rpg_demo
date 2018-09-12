@@ -188,6 +188,64 @@ namespace rpg
                 }
             }
         }
+
+        public static void mouse_move(MouseEventArgs e)
+        {
+            if (panel != null)
+            {
+                panel.mouse_move_me(e);
+            }
+        }
+
+        public void mouse_move_me(MouseEventArgs e)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < button.Length; i++)
+            {
+                if (button[i] != null && button[i].is_collision(e.X, e.Y))
+                {
+                    current_button = i;
+                    set_button_status(Button.Status.SELECT);
+                    break;
+                }
+            }
+        }
+
+        public static void mouse_click(MouseEventArgs e)
+        {
+            if (panel != null)
+            {
+                panel.mouse_click_me(e);
+            }
+        }
+
+        public void mouse_click_me(MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            if (button == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < button.Length; i++)
+            {
+                if (button[i] != null && button[i].is_collision(e.X - x, e.Y - y))
+                {
+                    current_button = i;
+                    set_button_status(Button.Status.PRESS);
+                    button[i].click();
+                    break;
+                }
+            }
+        }
            
         
 
@@ -301,6 +359,11 @@ namespace rpg
                 }
             }
 
+            public bool is_collision(int collision_x, int collision_y)
+            {
+                Rectangle rect = new Rectangle(x, y, w, h);
+                return rect.Contains(collision_x, collision_y);
+            }
 
         }
     }

@@ -41,7 +41,8 @@
             this.stage.Size = new System.Drawing.Size(679, 526);
             this.stage.TabIndex = 0;
             this.stage.TabStop = false;
-            this.stage.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.stage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.stage_MouseMove);
+            this.stage.MouseClick += new System.Windows.Forms.MouseEventHandler(this.stage_MouseClick);
             // 
             // timer1
             // 
