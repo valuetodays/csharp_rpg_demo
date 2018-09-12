@@ -6,6 +6,7 @@ namespace rpg
     public class Message
     {
         public static Panel message = new Panel();
+        public static Panel messagetip = new Panel();
         public static Bitmap face;
 
         public enum Face
@@ -17,7 +18,7 @@ namespace rpg
         public static Face face_pos = Face.LEFT;
 
         public static string name = "";
-        public static string context = "";
+        public static string content = "";
 
         public static void init()
         {
@@ -32,13 +33,47 @@ namespace rpg
             message.set(0, 415, ResourceContextDeterminer.GetAssetPath("msg.png"), 0, -1);
             message.draw_event += new Panel.Draw_event(msgdraw);
             message.init();
+            
+            Panel.Button btn_ok_tip = new Panel.Button();
+            btn_ok_tip.set(-1000, -1000, 2000, 2000,
+                "", "", "",
+                -1, -1, -1, -1);
+            btn_ok_tip.click_event += new Panel.Button.Click_event(btntip_ok_event);
+            messagetip.button = new Panel.Button[1];
+            messagetip.button[0] = btn_ok_tip;
+            messagetip.set(251, 200, ResourceContextDeterminer.GetAssetPath("msgtip.png"), 0, -1);
+            messagetip.draw_event += new Panel.Draw_event(msgdrawtip);
+            messagetip.init();
+
         }
+
+        public static void btntip_ok_event()
+        {
+            messagetip.hide();
+        }
+
+        public static void msgdrawtip(Graphics g, int x_offset, int y_offset)
+        {
+            Font content_font = new Font("黑体", 12);
+            Brush content_brush = new SolidBrush(Color.WhiteSmoke);
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            g.DrawString(content, content_font, content_brush,
+                new Rectangle(x_offset, y_offset + 12, 291, 42), sf);
+        }
+
+        public static void showtip(String content0)
+        {
+            content = content0;
+            messagetip.show();
+        }
+        
 
         public static void show(string name0, string content0, 
             string face_path, Face face_pos0)
         {
             name = name0;
-            context = content0;
+            content = content0;
             if (Comm.isNotNullOrEmptyString(face_path))
             {
                 face = new Bitmap(face_path);
@@ -112,7 +147,7 @@ namespace rpg
             Font content_font = new Font("黑体", 12);
             Brush content_brush = Brushes.WhiteSmoke;
             StringFormat content_sf = new StringFormat();
-            string show_content = linefeed(context, 25);
+            string show_content = linefeed(content, 25);
             if (face_pos == Face.LEFT)
             {
                 g.DrawString(show_content, content_font, content_brush,

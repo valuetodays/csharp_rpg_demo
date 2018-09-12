@@ -34,7 +34,9 @@ namespace rpg
                 block();
             } else if (i == 1)
             {
-                dialogResult = MessageBox.Show("我是男孩");
+                Message.showtip("遇到一个男孩。");
+                block();
+//                dialogResult = MessageBox.Show("我是男孩");
             } else if (i == 2)
             {
                 Map.change_map(Form1.map, Form1.player, Form1.npc, 1, 955, 550, 2, Form1.music_player);
