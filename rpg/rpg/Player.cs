@@ -21,6 +21,10 @@ namespace rpg
         public int x_offset = -120;
         public int y_offset = -220;
         public int collision_ray = 50;
+
+        public static int target_x = -1;
+        public static int target_y = -1;
+            
         
         public enum Status
         {
@@ -120,9 +124,7 @@ namespace rpg
 
         public static void key_ctrl_up(Player[] player, KeyEventArgs e)
         {
-            Player p = player[current_player];
-            p.anm_frame = 0;
-            p.last_walk_time = 0;
+            stop_walk(player);
         }
 
         public static int get_pos_x(Player[] player)
@@ -230,6 +232,111 @@ namespace rpg
                     }
                 }
             }
+        } // end of method 
+
+        public static int is_reach_x(Player[] player, int target_x)
+        {
+            Player p = player[current_player];
+            if (p.x - target_x > p.speed / 2)
+            {
+                return 1;
+            }
+
+            if (p.x - target_x < -p.speed/2)
+            {
+                return -1;
+            }
+
+            return 0; // 到达目的地
         }
-    }
+
+        public static int is_reach_y(Player[] player, int target_y)
+        {
+            Player p = player[current_player];
+            if (p.y - target_y > p.speed/2)
+            {
+                return 1;
+            }
+
+            if (p.y - target_y < -p.speed/2)
+            {
+                return -1;
+            }
+
+            return 0;
+        }
+
+        public static void mouse_click(Map[] map, Player[] player, Rectangle stage, MouseEventArgs e)
+        {
+            if (Player.status != Status.WALK)
+            {
+                return;
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                target_x = e.X - Map.get_map_sx(map, player, stage);
+                target_y = e.Y - Map.get_map_sy(map, player, stage);
+            }
+        }
+
+        public static void timer_logic(Player[] player, Map[] map)
+        {
+            move_logic(player, map);
+        }
+
+        public static void move_logic(Player[] player, Map[] map)
+        {
+            if (target_x < 0 || target_y < 0)
+            {
+                return;      
+            }
+
+            step_to(player, map, target_x, target_y);
+        }
+
+        public static void stop_walk(Player[] player)
+        {
+            Player p = player[current_player];
+            p.anm_frame = 0;
+            p.last_walk_time = 0;
+
+            target_x = -1;
+            target_y = -1;
+        }
+
+        public static void step_to(Player[] player, Map[] map, int target_x, int target_y)
+        {
+            if (is_reach_x(player, target_x) == 0
+                && is_reach_y(player, target_y) == 0)
+            {
+                stop_walk(player);
+                return;
+            }
+
+            Player p = player[current_player];
+            if (is_reach_x(player, target_x)>0 && Map.can_through(map, p.x - p.speed, p.y))
+            {
+                walk(player, map, Comm.Direction.LEFT);
+                return;
+            }
+            if (is_reach_x(player, target_x)<0 && Map.can_through(map, p.x + p.speed, p.y))
+            {
+                walk(player, map, Comm.Direction.RIGHT);
+                return;
+            }
+            if (is_reach_y(player, target_x)>0 && Map.can_through(map, p.x, p.y - p.speed))
+            {
+                walk(player, map, Comm.Direction.UP);
+                return;
+            }
+            if (is_reach_y(player, target_x)<0 && Map.can_through(map, p.x, p.y + p.speed))
+            {
+                walk(player, map, Comm.Direction.DOWN);
+                return;
+            }
+            stop_walk(player);
+        }
+        
+    } // end of class
 }

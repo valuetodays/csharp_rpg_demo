@@ -149,7 +149,7 @@ namespace rpg
             }
         }
 
-        private static int get_map_sy(Map[] map, Player[] player, Rectangle stage)
+        public static int get_map_sy(Map[] map, Player[] player, Rectangle stage)
         {
             Map m = map[current_map];
             if (m.bitmap == null)
@@ -176,7 +176,7 @@ namespace rpg
             return map_sy;
         }
 
-        private static int get_map_sx(Map[] map, Player[] player, Rectangle stage)
+        public static int get_map_sx(Map[] map, Player[] player, Rectangle stage)
         {
             Map m = map[current_map];
             if (m.bitmap == null)

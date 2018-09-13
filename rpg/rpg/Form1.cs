@@ -129,6 +129,7 @@ namespace rpg
             {
                 Panel.mouse_click(e);
             }
+            Player.mouse_click(map, player, new Rectangle(0, 0, stage.Width, stage.Height), e);
         }
 
         private void Draw()
@@ -169,6 +170,8 @@ namespace rpg
         private void timer1_Tick(object sender, EventArgs e)
         {
             Console.WriteLine("timer1_Tick.");
+            Player.timer_logic(player, map);
+            
             for (int i = 0; i < npc.Length; i++)
             {
                 if (npc[i] != null && npc[i].map == Map.current_map)
