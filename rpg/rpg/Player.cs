@@ -24,6 +24,9 @@ namespace rpg
 
         public static int target_x = -1;
         public static int target_y = -1;
+        public static Bitmap move_flag;
+        public static long FLAG_SHOW_TIME = 3000;
+        public static long flag_start_time = 0;
             
         
         public enum Status
@@ -40,6 +43,8 @@ namespace rpg
         {
             bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("r1.png"));
             bitmap.SetResolution(96, 96);
+            move_flag = new Bitmap(ResourceContextDeterminer.GetAssetPath("move_flag.png"));
+            move_flag.SetResolution(96, 96);
         }
 
         public static void key_ctrl(Player[] player, Map[] map, Npc[] npc, KeyEventArgs e)
@@ -277,6 +282,7 @@ namespace rpg
             {
                 target_x = e.X - Map.get_map_sx(map, player, stage);
                 target_y = e.Y - Map.get_map_sy(map, player, stage);
+                flag_start_time = Comm.Time();
             }
         }
 
@@ -336,6 +342,26 @@ namespace rpg
                 return;
             }
             stop_walk(player);
+        }
+
+        public static void draw_flag(Graphics g, int map_sx, int map_sy)
+        {
+            if (target_x < 0 || target_y < 0)
+            {
+                return;
+            }
+
+            if (move_flag == null)
+            {
+                return;
+            }
+
+            if (Comm.Time() - flag_start_time > FLAG_SHOW_TIME)
+            {
+                return;
+            }
+            g.DrawImage(move_flag, map_sx + target_x - 16, map_sy + target_y - 25);
+            
         }
         
     } // end of class

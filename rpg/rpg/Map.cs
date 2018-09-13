@@ -104,6 +104,7 @@ namespace rpg
                 g.DrawImage(m.back, 0, 0);
             }
             g.DrawImage(m.bitmap, map_sx, map_sy);
+            Player.draw_flag(g, map_sx, map_sy);
             draw_player_npc(map, player, npc, g, map_sx, map_sy);
             g.DrawImage(m.shade, map_sx, map_sy);
         }
