@@ -40,6 +40,7 @@ namespace rpg
 
             Title.show();
             StatusMenu.init();
+            Shop.init();
             
             
             // 光标
