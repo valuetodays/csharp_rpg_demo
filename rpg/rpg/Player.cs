@@ -28,6 +28,21 @@ namespace rpg
         public static long FLAG_SHOW_TIME = 3000;
         public static long flag_start_time = 0;
             
+        // 
+        public static int select_player = 0;
+        public int max_hp = 100;
+        public int hp = 100;
+        public int max_mp = 100;
+        public int mp = 100;
+        public int attack = 10;
+        public int defense = 10;
+        public int fspeed = 10;
+        public int fortune = 10;
+        public int equip_att = -1;
+        public int equip_def = -1;
+        public Bitmap status_bitmap;
+        public int[] skill = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+        public static int money = 200;
         
         public enum Status
         {
@@ -75,6 +90,10 @@ namespace rpg
             else if (e.KeyCode == Keys.Right)
             {
                 walk(player, map, Comm.Direction.RIGHT);
+            } else if (e.KeyCode == Keys.Escape)
+            {
+                StatusMenu.show();
+                Task.block();
             }
             npc_collision(player, map, npc, e);
         }
@@ -283,6 +302,10 @@ namespace rpg
                 target_x = e.X - Map.get_map_sx(map, player, stage);
                 target_y = e.Y - Map.get_map_sy(map, player, stage);
                 flag_start_time = Comm.Time();
+            } else if (e.Button == MouseButtons.Right)
+            {
+                StatusMenu.show();
+                Task.block();
             }
         }
 

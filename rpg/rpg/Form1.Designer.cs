@@ -40,7 +40,7 @@ namespace rpg
             // 
             this.stage.Location = new System.Drawing.Point(0, 1);
             this.stage.Name = "stage";
-            this.stage.Size = new System.Drawing.Size(679, 526);
+            this.stage.Size = new System.Drawing.Size(793, 566);
             this.stage.TabIndex = 0;
             this.stage.TabStop = false;
             this.stage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.stage_MouseMove);
@@ -58,7 +58,7 @@ namespace rpg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(675, 523);
+            this.ClientSize = new System.Drawing.Size(792, 566);
             this.Controls.Add(this.stage);
             this.KeyPreview = true;
             this.Name = "Form1";
