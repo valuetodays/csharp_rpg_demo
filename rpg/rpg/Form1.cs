@@ -19,7 +19,12 @@ namespace rpg
             InitializeComponent();
         }
 
-        public void Form1_Load(object sender, EventArgs e)
+
+        public Bitmap mc_normal;
+        public Bitmap mc_event;
+        public int mc_mod = 0; // 0-normal, 1-event
+        
+        private void Form1_Load(object sender, EventArgs e)
         {
             Title.init();
             Message.init();
@@ -113,14 +118,35 @@ namespace rpg
 
             Title.show();
             
+            
+            // 光标
+            mc_normal = new Bitmap(ResourceContextDeterminer.GetAssetPath("mc_1.png"));
+            mc_normal.SetResolution(96, 96);
+            mc_event = new Bitmap(ResourceContextDeterminer.GetAssetPath("mc_2.png"));
+            mc_event.SetResolution(96, 96);
         }
 
+        private void draw_mouse(Graphics g)
+        {
+            Point showPoint = stage.PointToClient(Cursor.Position);
+            if (mc_mod == 0)
+            {
+                g.DrawImage(mc_normal, showPoint.X, showPoint.Y);
+            }
+            else if (mc_mod == 1)
+            {
+                g.DrawImage(mc_event, showPoint.X, showPoint.Y);
+            }
+        }
+        
         private void stage_MouseMove(object sender, MouseEventArgs e)
         {
             if (Panel.panel != null)
             {
                 Panel.mouse_move(e);
             }
+
+            mc_mod = Npc.check_mouse_collision(map, player, npc, new Rectangle(0, 0, stage.Width, stage.Height), e);
         }
 
         private void stage_MouseClick(object sender, MouseEventArgs e)
@@ -131,6 +157,16 @@ namespace rpg
             {
                 Panel.mouse_click(e);
             }
+        }
+
+        private void stage_MouseEnter(object sender, EventArgs eventArgs)
+        {
+            Cursor.Hide();
+        }
+
+        private void stage_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor.Show();
         }
 
         private void Draw()
@@ -145,6 +181,7 @@ namespace rpg
             {
                 Panel.draw(g);
             }
+            draw_mouse(g);
             
             myBuffer.Render();
             myBuffer.Dispose();

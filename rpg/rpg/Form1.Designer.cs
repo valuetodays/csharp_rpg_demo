@@ -1,4 +1,6 @@
-﻿namespace rpg
+﻿using System;
+
+namespace rpg
 {
     partial class Form1
     {
@@ -43,6 +45,8 @@
             this.stage.TabStop = false;
             this.stage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.stage_MouseMove);
             this.stage.MouseClick += new System.Windows.Forms.MouseEventHandler(this.stage_MouseClick);
+            this.stage.MouseEnter += new EventHandler(this.stage_MouseEnter);
+            this.stage.MouseLeave += new EventHandler(this.stage_MouseLeave);
             // 
             // timer1
             // 

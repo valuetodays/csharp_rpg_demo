@@ -326,6 +326,36 @@ namespace rpg
             return rectangle.Contains(player_x, player_y);
         }
 
+        public static int check_mouse_collision(Map[] map, Player[] player, Npc[] npc, Rectangle stage, MouseEventArgs e)
+        {
+            if (Player.status != Player.Status.WALK)
+            {
+                return 0;
+            }
+
+            if (npc == null)
+            {
+                return 0;
+            }
+
+            for (int i = 0; i < npc.Length; i++)
+            {
+                if (npc[i] == null || npc[i].map != Map.current_map)
+                {
+                    continue;
+                }
+
+                int collision_x = e.X - Map.get_map_sx(map, player, stage);
+                int collision_y = e.Y - Map.get_map_sy(map, player, stage);
+                if (npc[i].is_mouse_collision(collision_x, collision_y))
+                {
+                    return 1;
+                }
+            }
+
+            return 0;
+        }
+
         public static void mouse_click(Map[] map, Player[] player, Npc[] npc, Rectangle stage, MouseEventArgs e)
         {
             if (Player.status != Player.Status.WALK)
