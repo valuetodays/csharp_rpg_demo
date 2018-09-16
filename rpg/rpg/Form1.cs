@@ -125,11 +125,12 @@ namespace rpg
 
         private void stage_MouseClick(object sender, MouseEventArgs e)
         {
+            Player.mouse_click(map, player, new Rectangle(0, 0, stage.Width, stage.Height), e);
+            Npc.mouse_click(map, player, npc, new Rectangle(0, 0, stage.Width, stage.Width), e);
             if (Panel.panel != null)
             {
                 Panel.mouse_click(e);
             }
-            Player.mouse_click(map, player, new Rectangle(0, 0, stage.Width, stage.Height), e);
         }
 
         private void Draw()

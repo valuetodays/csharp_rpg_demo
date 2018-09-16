@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 namespace rpg
 {
@@ -35,6 +36,15 @@ namespace rpg
         public Comm.Direction idle_walk_direction = Comm.Direction.DOWN;
         public int idle_walk_time = 0;
         public int idle_walk_time_now = 0;
+        
+        // 鼠标碰撞区域 mouse_click
+        public int mc_xoffset = 0;
+        public int mc_yoffset = -30;
+        public int mc_w = 100;
+        public int mc_h = 150;
+        public static int mc_distance_x = 300;
+        public static int mc_distance_y = 200;
+        
 
         public void load()
         {
@@ -50,6 +60,47 @@ namespace rpg
                 {
                     anm[i].load();
                 }
+            }
+            
+            //鼠标碰撞区域
+            if (bitmap != null)
+            {
+                if (npc_type == Npc_type.NORMAL)
+                {
+                    if (mc_w == 0)
+                    {
+                        mc_w = bitmap.Width;
+                    }
+
+                    if (mc_h == 0)
+                    {
+                        mc_h = bitmap.Height;
+                    }
+                } else if (npc_type == Npc_type.CHARACTER)
+                {
+                    if (mc_w == 0)
+                    {
+                        mc_w = bitmap.Width / 4;
+                    }
+
+                    if (mc_h == 0)
+                    {
+                        mc_h = bitmap.Height / 4;
+                    }
+                }
+            }
+            else
+            {
+                if (mc_w == 0)
+                {
+                    mc_w = region_x;
+                }
+
+                if (mc_h == 0)
+                {
+                    mc_h = region_y;
+                }
+              
             }
         }
 
@@ -239,6 +290,78 @@ namespace rpg
                 );
             Bitmap bitmap0 = bitmap.Clone(rect, bitmap.PixelFormat);
             g.DrawImage(bitmap0, map_sx + x + x_offset, map_sy + y + y_offset);
+        }
+
+        public bool is_mouse_collision(int collision_x, int collision_y)
+        {
+            // 有图
+            if (bitmap != null)
+            {
+                if (npc_type == Npc_type.NORMAL)
+                {
+                    int center_x = x + x_offset + bitmap.Width / 2;
+                    int center_y = y + y_offset + bitmap.Height / 2;
+                    Rectangle rect = new Rectangle(center_x - mc_w /2, center_y-mc_h/2, mc_w, mc_h);
+                    return rect.Contains(collision_x, collision_y);
+                } else if (npc_type == Npc_type.CHARACTER)
+                {
+                    int center_x = x + x_offset + bitmap.Width  / 4 / 2;
+                    int center_y = y + y_offset + bitmap.Height / 4 / 2;
+                    Rectangle rect = new Rectangle(center_x - mc_w /2, center_y-mc_h/2, mc_w, mc_h);
+                    return rect.Contains(collision_x, collision_y);
+                }
+
+                return false;
+            }
+            else // 无图
+            {
+                Rectangle rect = new Rectangle(x - mc_w/2, y - mc_h/2, mc_w, mc_h);
+                return rect.Contains(collision_x, collision_y);
+            }
+        }
+
+        public bool check_me_distance(Npc n, int player_x, int player_y)
+        {
+            Rectangle rectangle = new Rectangle(n.x - mc_distance_x/2, n.y - mc_distance_y/2,mc_distance_x, mc_distance_y);
+            return rectangle.Contains(player_x, player_y);
+        }
+
+        public static void mouse_click(Map[] map, Player[] player, Npc[] npc, Rectangle stage, MouseEventArgs e)
+        {
+            if (Player.status != Player.Status.WALK)
+            {
+                return;
+            }
+
+            if (npc == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < npc.Length; i++)
+            {
+                if (npc[i] == null || npc[i].map != Map.current_map)
+                {
+                    continue;
+                }
+
+                int collision_x = e.X - Map.get_map_sx(map, player, stage);
+                int collision_y = e.Y - Map.get_map_sy(map, player, stage);
+                if (!npc[i].is_mouse_collision(collision_x, collision_y))
+                {
+                    continue;
+                }
+
+                if (!npc[i].check_me_distance(npc[i], Player.get_pos_x(player), Player.get_pos_y(player)))
+                {
+                    Player.stop_walk(player);
+                    Message.showtip("请走近些");
+                    Task.block();
+                    continue;
+                }
+                Player.stop_walk(player);
+                Task.story(i);
+            }
         }
 
 
