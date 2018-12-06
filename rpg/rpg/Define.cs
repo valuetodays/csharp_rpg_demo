@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace rpg
 {
@@ -27,6 +28,41 @@ namespace rpg
             player[2].is_active = 1;
             player[2].status_bitmap = new Bitmap(ResourceContextDeterminer.GetAssetPath("item/face3.png"));
             player[2].status_bitmap.SetResolution(96, 96);
+            
+            Animation anm_att = new Animation();
+            anm_att.bitmap_path = ResourceContextDeterminer.GetAssetPath("fight/anm_att.png");
+            anm_att.row = 4;
+            anm_att.col = 2;
+            anm_att.max_frame = 5;
+            anm_att.anm_rate = 1;
+            Animation anm_item = new Animation();
+            anm_item.bitmap_path = ResourceContextDeterminer.GetAssetPath("fight/anm_item.png");
+            anm_item.row = 4;
+            anm_item.col = 1;
+            anm_item.max_frame = 4;
+            anm_item.anm_rate = 1;
+            Animation anm_skill = new Animation();
+            anm_skill.bitmap_path = ResourceContextDeterminer.GetAssetPath("fight/anm_skill.png");
+            anm_skill.row = 4;
+            anm_skill.col = 1;
+            anm_skill.max_frame = 4;
+            anm_skill.anm_rate = 1;
+            
+            player[0].fset("主角1", 
+                ResourceContextDeterminer.GetAssetPath("fight/p1.png"), 
+                -120, -120, 
+                ResourceContextDeterminer.GetAssetPath("fight/fm_face1.png"),
+                anm_att, anm_item, anm_skill);
+            player[1].fset("主角2", 
+                ResourceContextDeterminer.GetAssetPath("fight/p2.png"), 
+                -120, -120, 
+                ResourceContextDeterminer.GetAssetPath("fight/fm_face2.png"),
+                anm_att, anm_item, anm_skill);
+            player[2].fset("主角3", 
+                ResourceContextDeterminer.GetAssetPath("fight/p3.png"), 
+                -120, -120, 
+                ResourceContextDeterminer.GetAssetPath("fight/fm_face3.png"),
+                anm_att, anm_item, anm_skill);
             
             
             map[0] = new Map();
@@ -149,6 +185,14 @@ namespace rpg
             Skill.learn_skill(0, 0, 1);
             Skill.learn_skill(0, 1, 1);
             Skill.learn_skill(1, 0, 1);
+            
+            Enemy.enemy = new Enemy[1];
+            Enemy.enemy[0] = new Enemy();
+            Enemy.enemy[0].set("老虎", 
+                ResourceContextDeterminer.GetAssetPath("fight/enemy.png"),
+                -120, -120,
+                300, 20, 10, 15, 10, anm_att, anm_skill,
+                new int[]{-1, -1, -1, -1, -1});
         }
     }
 }

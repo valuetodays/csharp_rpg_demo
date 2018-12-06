@@ -48,6 +48,10 @@ namespace rpg
             mc_normal.SetResolution(96, 96);
             mc_event = new Bitmap(ResourceContextDeterminer.GetAssetPath("mc_2.png"));
             mc_event.SetResolution(96, 96);
+            
+            Fight.start(new int[]{0, 0, -1}, 
+                ResourceContextDeterminer.GetAssetPath("fight/f_scene.png"),
+                1, 0, 1, 1, 100);
         }
 
         private void draw_mouse(Graphics g)
@@ -99,8 +103,15 @@ namespace rpg
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             BufferedGraphics myBuffer = currentContext.Allocate(g1, this.DisplayRectangle);
             Graphics g = myBuffer.Graphics;
-            
-            Map.draw(map, player, npc, g, new Rectangle(0, 0, stage.Width, stage.Height));
+
+            if (Fight.fighting == 0)
+            {
+                Map.draw(map, player, npc, g, new Rectangle(0, 0, stage.Width, stage.Height));
+            }
+            else
+            {
+                Fight.draw(g);
+            }
             if (Panel.panel != null)
             {
                 Panel.draw(g);

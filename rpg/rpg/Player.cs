@@ -43,6 +43,15 @@ namespace rpg
         public Bitmap status_bitmap;
         public int[] skill = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
         public static int money = 200;
+
+        public Bitmap fbitmap;  // f -> fight
+        public int fx_offset = -120;
+        public int fy_offset = -120;
+        public Bitmap fface;
+        public Animation anm_att;
+        public Animation anm_item;
+        public Animation anm_skill;
+        public string name = "";
         
         public enum Status
         {
@@ -385,6 +394,35 @@ namespace rpg
             }
             g.DrawImage(move_flag, map_sx + target_x - 16, map_sy + target_y - 25);
             
+        }
+
+        public void fset(string name, string fbitmap_path, int fx_offset, int fy_offset, 
+            string fface_path, 
+            Animation anm_att, Animation anm_item, Animation anm_skill)
+        {
+            this.name = name;
+            if (Comm.isNotNullOrEmptyString(fbitmap_path))
+            {
+                this.fbitmap = new Bitmap(fbitmap_path);
+                this.fbitmap.SetResolution(96, 96);
+            }
+
+            this.fx_offset = fx_offset;
+            this.fy_offset = fy_offset;
+
+            if (Comm.isNotNullOrEmptyString(fface_path))
+            {
+                this.fface = new Bitmap(fface_path);
+                this.fface.SetResolution(96, 96);
+            }
+
+            this.anm_att = anm_att;
+            this.anm_item = anm_item;
+            this.anm_skill = anm_skill;
+            
+            this.anm_att.load();
+            this.anm_item.load();
+            this.anm_skill.load();
         }
         
     } // end of class
