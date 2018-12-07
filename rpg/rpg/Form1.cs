@@ -50,7 +50,7 @@ namespace rpg
             mc_event.SetResolution(96, 96);
             
             Fight.start(new int[]{0, 0, -1}, 
-                ResourceContextDeterminer.GetAssetPath("fight/f_scene.png"),
+                "fight/f_scene.png",
                 1, 0, 1, 1, 100);
         }
 
