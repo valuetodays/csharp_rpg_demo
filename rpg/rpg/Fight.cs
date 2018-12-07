@@ -44,11 +44,44 @@ namespace rpg
             FTE = 4
         };
 
+        public static Point[] player_pos = new Point[3];
+        public static Point[] enemy_pos = new Point[3];
+
+        public static void set_pos()
+        {
+            player_pos[0].X = 617;
+            player_pos[0].Y = 258;
+            player_pos[1].X = 695;
+            player_pos[1].Y = 361;
+            player_pos[2].X = 588;
+            player_pos[2].Y = 417;
+            
+            
+            enemy_pos[0].X = 253;
+            enemy_pos[0].Y = 250;
+            enemy_pos[1].X = 179;
+            enemy_pos[1].Y = 345;
+            enemy_pos[2].X = 220;
+            enemy_pos[2].Y = 441;
+        }
+        
+
+        /// <summary>
+        /// 开始战斗
+        /// </summary>
+        /// <param name="enemy"></param>
+        /// <param name="bg_path"></param>
+        /// <param name="isgameover"></param>
+        /// <param name="winitem1"></param>
+        /// <param name="winitem2"></param>
+        /// <param name="winitem3"></param>
+        /// <param name="losemoney"></param>
         public static void start(int[] enemy,
             string bg_path, int isgameover,
             int winitem1, int winitem2, int winitem3,
             int losemoney)
         {
+            set_pos();
             if (enemy.Length < 3)
             {
                 MessageBox.Show("enemy数组长度小于3");
@@ -198,7 +231,58 @@ namespace rpg
 
         public static void draw(Graphics g)
         {
+            if (bg != null)
+            {
+                g.DrawImage(bg, 0, 0);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                int index = player[i].id;
+                if (index < 0)
+                {
+                    continue;   
+                }
+
+                if (Form1.player[index].fbitmap != null)
+                {
+                    Bitmap bitmap = get_fbitmap(Form1.player[index].fbitmap, player[i].status);
+                    g.DrawImage(bitmap, 
+                        player_pos[i].X + Form1.player[index].fx_offset,
+                        player_pos[i].Y + Form1.player[index].fy_offset
+                        );
+                }
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                int index = enemy[i].id;
+                if (index < 0)
+                {
+                    continue;
+                }
+
+                if (Enemy.enemy[index].fbitmap!=null)
+                {
+                    Bitmap bitmap = get_fbitmap(Enemy.enemy[index].fbitmap, enemy[i].status);
+                    g.DrawImage(bitmap, 
+                        enemy_pos[i].X + Enemy.enemy[index].fx_offset,
+                        enemy_pos[i].Y + Enemy.enemy[index].fy_offset
+                    );
+                }
+            }
+        }
+        
+        // 根据状态获取图片
+        private static Bitmap get_fbitmap(Bitmap bitmap, int status)
+        {
+            if (bitmap == null)
+            {
+                return null;
+            }
             
+            Rectangle rect = new Rectangle(bitmap.Width/4*status, 0, bitmap.Width/4, bitmap.Height);
+            return bitmap.Clone(rect, bitmap.PixelFormat);
         }
 
 
